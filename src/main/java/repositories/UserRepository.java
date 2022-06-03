@@ -18,8 +18,9 @@ import java.sql.Connection;
 //DESKTOP-9QDD8UG
 //SCHOOL: SD2309
 public class UserRepository {
-	private String url = "jdbc:sqlserver://DESKTOP-9QDD8UG\\SQLExpress;encrypt=false;databaseName=Parkinglot;integratedSecurity=true";
+	private String url = "jdbc:sqlserver://DESKTOP-9QDD8UG\\SQLExpress;encrypt=false;databaseName=Parking_Lot;integratedSecurity=true";
 	private Connection conn;
+	private User user;
 
 	public UserRepository() throws SQLException {
 
@@ -49,9 +50,15 @@ public class UserRepository {
 	}
 
 	public void insertUser(String firstName, String lastName, String email, String username, String password, int role,
-			int parkingId) throws SQLException {
-		String query1 = "INSERT INTO [User](FirstName,LastName,Email,Username,Password,Role,ParkingId) "
-				+ "VALUES(?,?,?,?,?,?,?)";
+						   int parkingId) throws SQLException {
+		String query1 = "EXEC	[dbo].[Procedurka]"
+				+ "		@FirstName = ? ,  "
+				+ "		@LastName  = ? ,  "
+				+ "		@Email 	   = ? ,  "
+				+ "		@Username  = ? ,  "
+				+ "		@Password  = ? ,  "
+				+ "		@Role 	   = ? ,  "
+				+ "		@ParkingId = ?    ";
 
 		PreparedStatement stmt = conn.prepareStatement(query1);
 
@@ -65,7 +72,7 @@ public class UserRepository {
 
 		int rs = stmt.executeUpdate();
 
-		System.out.println(String.format("Rows affected: %d", rs));
+		System.out.println(String.format("Gutou"));
 	}
 
 	// shows first name of the customer by id
@@ -88,7 +95,7 @@ public class UserRepository {
 		}
 	}
 
-// Updates the customers first name by id
+	// Updates the customers first name by id
 	public void updateUser(int id, String Fname, String Lname) throws SQLException {
 		String query1 = "UPDATE [User] " + "SET FirstName = ?, LastName = ? " + "WHERE UserId = ?";
 
@@ -117,6 +124,29 @@ public class UserRepository {
 
 	}
 
+	public User login(String username, String pass) throws SQLException {
+
+		String query1 = "SELECT * FROM [User] " + "WHERE Username = '" + username + "';";
+
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(query1);
+
+		while(rs.next()) {
+			if(rs.getString("Password").equals("pass")) {
+				user = new User(Long.parseLong( rs.getString("UserId")),rs.getString("UserId"),rs.getString("UserId"));
+				System.out.println("YOU HAVE LOGGED IN SUCCESSFULLY");
+				return user;
+			}
+		}
+		return null;
+
+
+
+
+		//System.out.println(String.format("Rows affected: %d", rs));
+
+	}
+
 	public List<User> getUser() throws SQLException {
 
 		List<User> customers = new ArrayList<User>();
@@ -137,5 +167,24 @@ public class UserRepository {
 	public List<User> getUsers() {
 // TODO Auto-generated method stub
 		return null;
+	}
+
+	public User selectUser(String userName) throws SQLException{
+		String query1 = "SELECT * FROM [User] " + "WHERE Username = '"+userName + "';";
+
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery(query1);
+
+		while(rs.next()) {
+			if(rs.getString("Password").equals("pass")) {
+				user = new User(Long.parseLong( rs.getString("UserId")),rs.getString("UserId"),rs.getString("UserId"));
+				return user;
+			}
+		}
+		return null;
+
+		//System.out.println(String.format("Rows affected: %d", rs));
+
+
 	}
 }

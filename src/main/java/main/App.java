@@ -21,7 +21,6 @@ public class App {
 	public static void main(String... args) throws SQLException {
 		System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out), true, UTF_8));
 		// System.out.println(System.getProperty("file.encoding"));
-		UserRepository dataBase = new UserRepository();
 		// dataBase.ShowCustomers();
 		// dataBase.showCustomerById(1);
 		// dataBase.ShowCustomers();

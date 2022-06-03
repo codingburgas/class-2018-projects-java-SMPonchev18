@@ -22,7 +22,7 @@ public class ProjectRepository {
 		// 3. Execute PreparedStatement query and get the ResultSet
 		try (Connection conn = DriverManager.getConnection(ApplicationProperties.JDBC_URL,
 				ApplicationProperties.USERNAME, ApplicationProperties.PASSWORD);
-				PreparedStatement ps = conn.prepareStatement(query)) {
+			 PreparedStatement ps = conn.prepareStatement(query)) {
 
 			ResultSet resultSet = ps.executeQuery();
 			while (resultSet.next()) {
@@ -45,7 +45,7 @@ public class ProjectRepository {
 		// 3. Execute PreparedStatement query and get the ResultSet
 		try (Connection conn = DriverManager.getConnection(ApplicationProperties.JDBC_URL,
 				ApplicationProperties.USERNAME, ApplicationProperties.PASSWORD);
-				PreparedStatement ps = conn.prepareStatement(query)) {
+			 PreparedStatement ps = conn.prepareStatement(query)) {
 			ps.setLong(1, userId);
 
 			ResultSet resultSet = ps.executeQuery();

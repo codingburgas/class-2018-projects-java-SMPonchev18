@@ -19,8 +19,8 @@ public class User {
 	}
 
 	// Getters and Setters
-	public Long getUserId() {
-		return userId;
+	public String getUserId() {
+		return userId.toString();
 	}
 
 	public void setUserId(Long userId) {
