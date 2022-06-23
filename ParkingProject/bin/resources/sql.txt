@@ -1,0 +1,236 @@
+USE [master]
+GO
+/****** Object:  Database [ParkingManagement]    Script Date: 6/21/2022 2:16:28 PM ******/
+CREATE DATABASE [ParkingManagement]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'ParkingManagement', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\ParkingManagement.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'ParkingManagement_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.SQLEXPRESS\MSSQL\DATA\ParkingManagement_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [ParkingManagement].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [ParkingManagement] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [ParkingManagement] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [ParkingManagement] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [ParkingManagement] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [ParkingManagement] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [ParkingManagement] SET  MULTI_USER 
+GO
+ALTER DATABASE [ParkingManagement] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [ParkingManagement] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [ParkingManagement] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [ParkingManagement] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [ParkingManagement] SET DELAYED_DURABILITY = DISABLED 
+GO
+USE [ParkingManagement]
+GO
+/****** Object:  Table [dbo].[Parkings]    Script Date: 6/21/2022 2:16:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Parkings](
+	[parkingId] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nvarchar](255) NOT NULL,
+	[address] [nvarchar](255) NOT NULL,
+ CONSTRAINT [PK_Parkings] PRIMARY KEY CLUSTERED 
+(
+	[parkingId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[SecurityGuards]    Script Date: 6/21/2022 2:16:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[SecurityGuards](
+	[userId] [int] NOT NULL,
+	[securityGuardId] [int] IDENTITY(1,1) NOT NULL,
+	[isAuthorised] [bit] NOT NULL,
+	[parkingId] [int] NOT NULL,
+ CONSTRAINT [PK_SecurityGuards] PRIMARY KEY CLUSTERED 
+(
+	[securityGuardId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 6/21/2022 2:16:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[userId] [int] IDENTITY(1,1) NOT NULL,
+	[username] [varchar](255) NOT NULL,
+	[password] [varbinary](max) NOT NULL,
+	[FirstName] [varchar](255) NOT NULL,
+	[LastName] [varchar](255) NOT NULL,
+	[phone] [varchar](50) NOT NULL,
+	[address] [varbinary](max) NOT NULL,
+ CONSTRAINT [PK_Users] PRIMARY KEY CLUSTERED 
+(
+	[userId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Vehicles]    Script Date: 6/21/2022 2:16:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Vehicles](
+	[vehicleId] [int] NOT NULL,
+	[parkingId] [int] NOT NULL,
+	[age] [int] NOT NULL,
+	[category] [nvarchar](255) NOT NULL,
+	[plateNumber] [nvarchar](255) NOT NULL,
+	[brand] [nvarchar](255) NOT NULL,
+	[model] [nvarchar](255) NOT NULL,
+ CONSTRAINT [PK_Vehicles] PRIMARY KEY CLUSTERED 
+(
+	[vehicleId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[Parkings] ON 
+GO
+INSERT [dbo].[Parkings] ([parkingId], [name], [address]) VALUES (1, N'admin', N'admin')
+GO
+SET IDENTITY_INSERT [dbo].[Parkings] OFF
+GO
+SET IDENTITY_INSERT [dbo].[SecurityGuards] ON 
+GO
+INSERT [dbo].[SecurityGuards] ([userId], [securityGuardId], [isAuthorised], [parkingId]) VALUES (5, 4, 0, 1)
+GO
+SET IDENTITY_INSERT [dbo].[SecurityGuards] OFF
+GO
+SET IDENTITY_INSERT [dbo].[Users] ON 
+GO
+INSERT [dbo].[Users] ([userId], [username], [password], [FirstName], [LastName], [phone], [address]) VALUES (5, N'asd', 0x02000000F7B5FB070A49C2CDF738A1A52D8A4846C9FD307714674109D8D0411476FD94A5E0E399D63EAC028A35A2A9A78000F461, N'asd', N'asd', N'0123456789', 0x02000000888FA0C9FCBF351277FC14DC15BB8FE2C22F01E055C6D128C3E0B93C420029F8)
+GO
+SET IDENTITY_INSERT [dbo].[Users] OFF
+GO
+ALTER TABLE [dbo].[SecurityGuards]  WITH CHECK ADD  CONSTRAINT [FK_SecurityGuards_Parkings] FOREIGN KEY([parkingId])
+REFERENCES [dbo].[Parkings] ([parkingId])
+GO
+ALTER TABLE [dbo].[SecurityGuards] CHECK CONSTRAINT [FK_SecurityGuards_Parkings]
+GO
+ALTER TABLE [dbo].[SecurityGuards]  WITH CHECK ADD  CONSTRAINT [FK_SecurityGuards_Users] FOREIGN KEY([userId])
+REFERENCES [dbo].[Users] ([userId])
+GO
+ALTER TABLE [dbo].[SecurityGuards] CHECK CONSTRAINT [FK_SecurityGuards_Users]
+GO
+ALTER TABLE [dbo].[Vehicles]  WITH CHECK ADD  CONSTRAINT [FK_Vehicles_Parkings] FOREIGN KEY([parkingId])
+REFERENCES [dbo].[Parkings] ([parkingId])
+GO
+ALTER TABLE [dbo].[Vehicles] CHECK CONSTRAINT [FK_Vehicles_Parkings]
+GO
+/****** Object:  StoredProcedure [dbo].[CheckUserPassword]    Script Date: 6/21/2022 2:16:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[CheckUserPassword]
+	@username varchar(255)
+	AS
+BEGIN
+	SET NOCOUNT ON;
+
+    SELECT CONVERT(nvarchar(max),DecryptByPassPhrase('pistol',password)) as password
+	FROM Users
+	WHERE username=@username;
+
+
+END
+GO
+/****** Object:  StoredProcedure [dbo].[insertUser]    Script Date: 6/21/2022 2:16:28 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Stoyan4o>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[insertUser] 
+	@username varchar(255),
+	@password nvarchar(255),
+	@FirstName nvarchar(255),
+	@LastName nvarchar(255),
+	@phone varchar(255),
+	@Address nvarchar(255)
+
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
+
+    -- Insert statements for procedure here 
+	INSERT INTO Users(username,password,FirstName,LastName,phone,address)
+	VALUES(@username, CONVERT(varbinary(max),EncryptByPassPhrase('pistol',@password)   ,2),@FirstName,@LastName,
+	 @phone,
+	CONVERT(varbinary(max),EncryptByPassPhrase('pistol',@Address)   ,2)
+	)
+END
+GO
+USE [master]
+GO
+ALTER DATABASE [ParkingManagement] SET  READ_WRITE 
+GO
